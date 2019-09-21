@@ -12,7 +12,7 @@ from .views import( UserListView,UserCreateView,UserUpdateView, MilkListView,Mil
             MilkCategoryRetrieveView,MilkCompanyRetrieveView,MilkCompanyCategoryRetrieveView,OrderRetrieveView,
             PaymentRetrieveView,CountryRetrieveView,StateRetrieveView,CityRetrieveView,DTRetrieveView,
             FPRetrieveView,DPListView,DPCreateView,DPUpdateView,DPDeleteView,DPRetrieveView,DPCListView,
-            DPCCreateView,DPCUpdateView,DPCDeleteView,DPCRetrieveView
+            DPCCreateView,DPCUpdateView,DPCDeleteView,DPCRetrieveView,AddToCartView
 
 )
 app_name = 'api'
@@ -123,6 +123,12 @@ urlpatterns = [
     path('dpcupdate/<int:d_id>',DPCUpdateView.as_view(),name='dpc-update'),
     path('dpcdelete/<int:d_id>',DPCDeleteView.as_view(),name='dpc-delete'),
     path('dpcretrieve/<int:d_id>',DPCRetrieveView.as_view(),name='dpc-retrieve'),
+
+    # AddToCart 
+    path('addtocartcreate',AddToCartView.as_view(), name="addtocart"),
+    path('addtocartdelete',AddToCartView.as_view(), name="addtocartdelete"),
+    path('addtocartget',AddToCartView.as_view(), name="addtocartget"),
+
 
 ]
 
