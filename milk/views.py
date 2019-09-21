@@ -1,12 +1,17 @@
 from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework import status
+from django.core import serializers
+from django.http import HttpResponse, JsonResponse
+import json
 from .models import ( User,Milk,Subscription,MilkCategory,
                 MilkCompany,MilkCompanyCategory,Order,Payment,Country,State,City,DeliveryTime,
-                Address,FarmerProduct,DailyNeedProduct,DailyPCategory)
+                Address,FarmerProduct,DailyNeedProduct,DailyPCategory,AddToCart)
 
 from .serializers import ( UserSerializer, MilkSerializer,SubscriptionSerializer,MilkCategorySerializer,MilkCompanySerializer,
                     MilkCompanyCategorySerializer,OrderSerializer,PaymentSerializer,CountrySerializer,StateSerializer,
                     CitySerializer,DeliveryTimeSerializer,AddressSerializer,FarmerProductSerializer,
-                    LoginSerializer,DailyNeedProductSerializer,DailyPCategorySerializer)
+                    LoginSerializer,DailyNeedProductSerializer,DailyPCategorySerializer,AddToCartSerializer)
 from rest_framework.views import APIView
 from django.contrib.auth import login as django_login, logout as django_logout
 from rest_framework.authtoken.models import Token
@@ -24,7 +29,6 @@ class LoginView(APIView):
 
 class LogoutView(APIView):
     authentication_classes = (TokenAuthentication, )
-
     def post(self, request):
         django_logout(request)
         return Response(status=204)
@@ -389,3 +393,47 @@ class DPCRetrieveView(generics.RetrieveAPIView):
     queryset = DailyPCategory.objects.all()
     serializer_class = DailyPCategorySerializer
     lookup_field = 'd_id'
+
+# AddtoCart View
+class AddToCartView(APIView):
+    def post(self, request):
+        try:
+            serializer = AddToCartSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            data=serializer.validated_data
+            user=AddToCart.objects.filter(user_id=data['user_id'],milk_id=data['milk_id'])
+            if user.exists():
+                user.update(qty=data['qty']) 
+            else:
+                user=AddToCart.objects.create(user_id=data['user_id'],qty=data['qty'],status=data['status'],milk_id=data['milk_id'])
+            return Response({"data":serializer.data, "status":201})
+           
+        except Exception as e:
+            print(e)
+            return Response({"error":"Server Error","status":500})
+
+
+    def delete(self,request):
+        try:
+            user_id=request.data['user_id']
+            milk_id=request.data['milk_id']
+            cart=AddToCart.objects.filter(user_id=user_id,milk_id=milk_id)
+            if cart.exists():
+                cart.delete()
+                print("Success")
+            else:
+                return Response({"date":"Not Found","status":404})
+            return Response({"date":"Deleted","status":204})
+
+            # return JsonResponse({"message": "user id `{}` Milk ID `{}` has been deleted.".format(user_id,milk_id)},status=204)
+        except Exception as e:
+            print(e)
+            return Response({"error":"Server Error","status":500})  
+    def get(self,request):
+        try:
+            cart=AddToCart.objects.all()
+            serializer = AddToCartSerializer(cart, many=True)
+            return Response({"data":serializer.data,"status":200})
+        except Exception as e:
+            print(e)
+            return Response({"error":"Server Error","status":500})

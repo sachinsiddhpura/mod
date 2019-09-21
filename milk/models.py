@@ -232,3 +232,14 @@ class DailyNeedProduct(models.Model):
     def __str__(self):
         return self.name
 
+
+class AddToCart(models.Model):
+    user_id=models.ForeignKey(User,related_name='addtocart',on_delete=models.CASCADE)
+    qty=models.IntegerField()
+    milk_id=models.ForeignKey(Milk,on_delete=models.CASCADE)
+    status=models.BooleanField()
+    class Meta:
+        verbose_name = ('Add_To_Cart')
+
+    def __str__(self):
+        return self.user_id
