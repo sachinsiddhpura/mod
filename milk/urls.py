@@ -12,7 +12,7 @@ from .views import( UserListView,UserCreateView,UserUpdateView, MilkListView,Mil
             MilkCategoryRetrieveView,MilkCompanyRetrieveView,MilkCompanyCategoryRetrieveView,OrderRetrieveView,
             PaymentRetrieveView,CountryRetrieveView,StateRetrieveView,CityRetrieveView,DTRetrieveView,
             FPRetrieveView,DPListView,DPCreateView,DPUpdateView,DPDeleteView,DPRetrieveView,DPCListView,
-            DPCCreateView,DPCUpdateView,DPCDeleteView,DPCRetrieveView,AddToCartView
+            DPCCreateView,DPCUpdateView,DPCDeleteView,DPCRetrieveView,AddToCartView,
 
 )
 app_name = 'api'
