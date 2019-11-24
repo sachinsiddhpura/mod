@@ -34,6 +34,11 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = '__all__'
 
+class ProfilePhotoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['profile_photo','id']
+
 
 class MilkSerializer(serializers.ModelSerializer):
     class Meta:

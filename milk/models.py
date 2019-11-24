@@ -1,6 +1,8 @@
 from django.db import models
 from django.core.validators import RegexValidator
-
+import os
+import random
+import string
 # Create your models here.
 MILK_AVAILABLE = (
     ('L','L'),
@@ -25,6 +27,17 @@ DAILYP_CATEGORY =(
     ('Grocery','Grocery')
 )
 
+def upload_profile_photo(instance,filename):
+    print(instance)
+    new_filename=random.randint(1,40000000000)
+    name,ext=get_file_ext(filename)
+    final_filename='{new_filename}{ext}'.format(new_filename=new_filename,ext=ext)
+    return 'user/{new_filename}/{final_filename}'.format(new_filename=new_filename,final_filename=final_filename)
+
+def get_file_ext(filepath):
+    base_name=os.path.basename(filepath)
+    name,ext=os.path.splitext(base_name)
+    return name,ext
 class User(models.Model):
     user_id             =models.IntegerField(unique=True)
     user_first_name     =models.CharField(max_length=120)
@@ -33,8 +46,8 @@ class User(models.Model):
                                          RegexValidator(r'^\d{1,10}$')])
     email               =models.EmailField()
     address_id          =models.IntegerField()
+    profile_photo       =models.ImageField(blank=False, null=False,upload_to=upload_profile_photo)
     status              =models.BooleanField()
-
     class Meta:
         verbose_name = ('Users')
 
