@@ -517,7 +517,6 @@ class AddToCartView(APIView):
                 user = AddToCart.objects.create(
                     user_id=data['user_id'], qty=data['qty'], status=data['status'], milk_id=data['milk_id'])
             return Response({"data": serializer.data, "price": price, "status": 201})
-
         except Exception as e:
             print(e)
             return Response({"error": "Server Error", "status": 500})
