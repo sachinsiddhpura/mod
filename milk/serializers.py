@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from milk.models import (User, Milk, Subscription, MilkCategory,
                          MilkCompany, MilkCompanyCategory, Order, Payment, Country, State, City, DeliveryTime,
-                         Address, FarmerProduct, DailyNeedProduct, DailyPCategory, AddToCart)
+                         FarmerProduct, DailyNeedProduct, DailyPCategory, AddToCart)
 
 
 class LoginSerializer(serializers.Serializer):
@@ -38,7 +38,6 @@ class ProfilePhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['profile_photo','id']
-
 
 class MilkSerializer(serializers.ModelSerializer):
     class Meta:
@@ -108,9 +107,8 @@ class DeliveryTimeSerializer(serializers.ModelSerializer):
 
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Address
-        fields = '__all__'
-
+        model = User
+        fields =['address','address2','postal_code','state','city']
 
 class FarmerProductSerializer(serializers.ModelSerializer):
     class Meta:

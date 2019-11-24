@@ -45,14 +45,19 @@ class User(models.Model):
     mobile_number       =models.CharField(max_length=10,validators=[
                                          RegexValidator(r'^\d{1,10}$')])
     email               =models.EmailField()
-    address_id          =models.IntegerField()
-    profile_photo       =models.ImageField(blank=False, null=False,upload_to=upload_profile_photo)
-    status              =models.BooleanField()
+    profile_photo       =models.ImageField(blank=True, null=True,upload_to=upload_profile_photo)
+    address =models.TextField(blank=True,null=True)
+    address2= models.TextField(blank=True, null=True)
+    postal_code=models.IntegerField(blank=True,null=True)
+    state=models.CharField(max_length=40,blank=True, null=True)
+    city=models.CharField(max_length=40,blank=True, null=True)
+    status              =models.BooleanField(default=True)
     class Meta:
         verbose_name = ('Users')
 
     def __str__(self):
         return  self.user_first_name
+
 
 class Milk(models.Model):
     milk_name           =models.CharField(max_length=120)
@@ -190,14 +195,7 @@ class DeliveryTime(models.Model):
     def __str__(self):
         return str(self.time)
 
-class Address(models.Model):
-    status              =models.BooleanField()
 
-    class Meta:
-        verbose_name = ('Address')
-
-    def __str__(self):
-        return self.status
 
 class FarmerProduct(models.Model):
     name                =models.CharField(max_length=120)

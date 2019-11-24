@@ -3,7 +3,7 @@ from django.contrib import admin
 # Register your models here.
 from .models import ( User,Milk,Subscription,MilkCategory,
                 MilkCompany,MilkCompanyCategory,Order,Payment,Country,State,City,DeliveryTime,
-                Address,FarmerProduct,DailyNeedProduct,DailyPCategory)
+                FarmerProduct,DailyNeedProduct,DailyPCategory)
 
 admin.site.register(User)
 admin.site.register(Milk)
@@ -17,7 +17,6 @@ admin.site.register(Country)
 admin.site.register(State)
 admin.site.register(City)
 admin.site.register(DeliveryTime)
-admin.site.register(Address)
 admin.site.register(FarmerProduct)
 admin.site.register(DailyNeedProduct)
 admin.site.register(DailyPCategory)
