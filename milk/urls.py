@@ -12,7 +12,7 @@ from .views import( UserListView,UserCreateView,UserUpdateView, MilkListView,Mil
             MilkCategoryRetrieveView,MilkCompanyRetrieveView,MilkCompanyCategoryRetrieveView,OrderRetrieveView,
             PaymentRetrieveView,CountryRetrieveView,StateRetrieveView,CityRetrieveView,DTRetrieveView,
             FPRetrieveView,DPListView,DPCreateView,DPUpdateView,DPDeleteView,DPRetrieveView,DPCListView,
-            DPCCreateView,DPCUpdateView,DPCDeleteView,DPCRetrieveView,AddToCartView,
+            DPCCreateView,DPCUpdateView,DPCDeleteView,DPCRetrieveView,AddToCartView,ProfilePhotoUpload
 
 )
 app_name = 'api'
@@ -38,7 +38,6 @@ urlpatterns = [
     path('subupdate/<int:payment_id>',SubscriptionUpdateView.as_view(),name='sub-update'),
     path('subdelete/<int:payment_id>',SubscriptionDeleteView.as_view(),name='sub-delete'),
     path('subretrieve/<int:payment_id>',SubscriptionRetrieveView.as_view(),name='sub-retrieve'),
-
 
     #MilkCategory
     path('mc/',MilkCategoryListView.as_view(), name="mc-list"),
@@ -129,6 +128,7 @@ urlpatterns = [
     path('addtocartdelete',AddToCartView.as_view(), name="addtocartdelete"),
     path('addtocartget',AddToCartView.as_view(), name="addtocartget"),
 
-
+    # ProfilePhotos
+    path('profilephoto',ProfilePhotoUpload.as_view(), name="profilephoto"),
 ]
 

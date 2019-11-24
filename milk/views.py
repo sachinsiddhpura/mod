@@ -1,7 +1,9 @@
+from rest_framework.parsers import FileUploadParser
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
 from django.core import serializers
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, JsonResponse
 import json
 from .models import (User, Milk, Subscription, MilkCategory,
@@ -11,7 +13,7 @@ from .models import (User, Milk, Subscription, MilkCategory,
 from .serializers import (UserSerializer, MilkSerializer, SubscriptionSerializer, MilkCategorySerializer, MilkCompanySerializer,
                           MilkCompanyCategorySerializer, OrderSerializer, PaymentSerializer, CountrySerializer, StateSerializer,
                           CitySerializer, DeliveryTimeSerializer, AddressSerializer, FarmerProductSerializer,
-                          LoginSerializer, DailyNeedProductSerializer, DailyPCategorySerializer, AddToCartSerializer)
+                          LoginSerializer, DailyNeedProductSerializer, DailyPCategorySerializer, AddToCartSerializer,ProfilePhotoSerializer)
 from rest_framework.views import APIView
 from django.contrib.auth import login as django_login, logout as django_logout
 from rest_framework.authtoken.models import Token
@@ -37,11 +39,22 @@ class LogoutView(APIView):
 
 # User
 
-
+class ProfilePhotoUpload(APIView):
+    parser_class = (FileUploadParser,)
+    def post(self,request,*args,**kwargs):
+        try:
+            user=User.objects.get(id=request.data['id'])
+            profile_serializer=ProfilePhotoSerializer(user,data=request.data)
+            if profile_serializer.is_valid():
+                profile_serializer.save()
+                return Response(profile_serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                return Response(profile_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except ObjectDoesNotExist as NE:
+            return Response({"message":"Not Exist","status":status.HTTP_404_NOT_FOUND}, status=status.HTTP_404_NOT_FOUND)
 class UserListView(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-
 
 class UserCreateView(generics.CreateAPIView):
     queryset = User.objects.all()
@@ -504,7 +517,6 @@ class AddToCartView(APIView):
                 user = AddToCart.objects.create(
                     user_id=data['user_id'], qty=data['qty'], status=data['status'], milk_id=data['milk_id'])
             return Response({"data": serializer.data, "price": price, "status": 201})
-
         except Exception as e:
             print(e)
             return Response({"error": "Server Error", "status": 500})
