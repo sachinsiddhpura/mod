@@ -8,7 +8,7 @@ from django.http import HttpResponse, JsonResponse
 import json
 from .models import (User, Milk, Subscription, MilkCategory,
                      MilkCompany, MilkCompanyCategory, Order, Payment, Country, State, City, DeliveryTime,
-                     Address, FarmerProduct, DailyNeedProduct, DailyPCategory, AddToCart)
+                      FarmerProduct, DailyNeedProduct, DailyPCategory, AddToCart)
 
 from .serializers import (UserSerializer, MilkSerializer, SubscriptionSerializer, MilkCategorySerializer, MilkCompanySerializer,
                           MilkCompanyCategorySerializer, OrderSerializer, PaymentSerializer, CountrySerializer, StateSerializer,
@@ -52,6 +52,21 @@ class ProfilePhotoUpload(APIView):
                 return Response(profile_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except ObjectDoesNotExist as NE:
             return Response({"message":"Not Exist","status":status.HTTP_404_NOT_FOUND}, status=status.HTTP_404_NOT_FOUND)
+
+class AddressStore(APIView):
+    def post(self,request,*args,**kwargs):
+        try:
+            user=User.objects.get(id=request.data['id'])
+            address_serializer=AddressSerializer(user,data=request.data)
+            if address_serializer.is_valid():
+                address_serializer.save()
+                return Response(address_serializer.data,status=status.HTTP_201_CREATED)
+            else:
+                return Response(address_serializer.data,status=status.HTTP_400_BAD_REQUEST) 
+        except ObjectDoesNotExist as NE:
+            print(NE)
+            return Response({"message":"Not Exist","status":status.HTTP_404_NOT_FOUND}, status=status.HTTP_404_NOT_FOUND)
+            
 class UserListView(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer

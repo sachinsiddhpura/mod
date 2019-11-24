@@ -12,7 +12,7 @@ from .views import( UserListView,UserCreateView,UserUpdateView, MilkListView,Mil
             MilkCategoryRetrieveView,MilkCompanyRetrieveView,MilkCompanyCategoryRetrieveView,OrderRetrieveView,
             PaymentRetrieveView,CountryRetrieveView,StateRetrieveView,CityRetrieveView,DTRetrieveView,
             FPRetrieveView,DPListView,DPCreateView,DPUpdateView,DPDeleteView,DPRetrieveView,DPCListView,
-            DPCCreateView,DPCUpdateView,DPCDeleteView,DPCRetrieveView,AddToCartView,ProfilePhotoUpload
+            DPCCreateView,DPCUpdateView,DPCDeleteView,DPCRetrieveView,AddToCartView,ProfilePhotoUpload,AddressStore
 
 )
 app_name = 'api'
@@ -130,5 +130,8 @@ urlpatterns = [
 
     # ProfilePhotos
     path('profilephoto',ProfilePhotoUpload.as_view(), name="profilephoto"),
+
+    # AddressStore
+    path("useraddress",AddressStore.as_view(),name="useraddress"),
 ]
 
